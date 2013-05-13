@@ -1,4 +1,4 @@
-module SalesforceBulk
+module Executrix
   class Connection
     def initialize(username, password, api_version, sandbox)
       @username = username
@@ -8,7 +8,7 @@ module SalesforceBulk
     end
 
     def login
-      response = SalesforceBulk::Http.login(
+      response = Executrix::Http.login(
         @sandbox,
         @username,
         @password,
@@ -20,7 +20,7 @@ module SalesforceBulk
     end
 
     def create_job operation, sobject, external_field
-      SalesforceBulk::Http.create_job(
+      Executrix::Http.create_job(
         @instance,
         @session_id,
         operation,
@@ -30,7 +30,7 @@ module SalesforceBulk
     end
 
     def close_job job_id
-      SalesforceBulk::Http.close_job(
+      Executrix::Http.close_job(
         @instance,
         @session_id,
         job_id,
@@ -38,7 +38,7 @@ module SalesforceBulk
     end
 
     def add_query job_id, data_or_soql
-      SalesforceBulk::Http.add_batch(
+      Executrix::Http.add_batch(
         @instance,
         @session_id,
         job_id,
@@ -47,7 +47,7 @@ module SalesforceBulk
     end
 
     def query_batch job_id, batch_id
-      SalesforceBulk::Http.query_batch(
+      Executrix::Http.query_batch(
         @instance,
         @session_id,
         job_id,
@@ -57,7 +57,7 @@ module SalesforceBulk
     end
 
     def query_batch_result_id job_id, batch_id
-      SalesforceBulk::Http.query_batch_result_id(
+      Executrix::Http.query_batch_result_id(
         @instance,
         @session_id,
         job_id,
@@ -67,7 +67,7 @@ module SalesforceBulk
     end
 
     def query_batch_result_data job_id, batch_id, result_id
-      SalesforceBulk::Http.query_batch_result_data(
+      Executrix::Http.query_batch_result_data(
         @instance,
         @session_id,
         job_id,
@@ -80,11 +80,11 @@ module SalesforceBulk
     def add_batch job_id, records
       return -1 if records.nil? || records.empty?
 
-      SalesforceBulk::Http.add_batch(
+      Executrix::Http.add_batch(
         @instance,
         @session_id,
         job_id,
-        SalesforceBulk::Helper.records_to_csv(records),
+        Executrix::Helper.records_to_csv(records),
         @api_version)[:id]
     end
 

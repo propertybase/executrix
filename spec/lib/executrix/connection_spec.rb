@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe SalesforceBulk::Connection do
+describe Executrix::Connection do
   let(:subject) { described_class.new nil, nil, nil, nil }
 
   {
@@ -15,7 +15,7 @@ describe SalesforceBulk::Connection do
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'should delegate correctly to Http class' do
-        SalesforceBulk::Http.
+        Executrix::Http.
           should_receive(method_name).
           and_return({})
         subject.send(method_name, *Array.new(num_of_params))
@@ -25,7 +25,7 @@ describe SalesforceBulk::Connection do
 
   describe '#add_query' do
     it 'should delegate correctly to Http class' do
-      SalesforceBulk::Http.should_receive(:add_batch).
+      Executrix::Http.should_receive(:add_batch).
           and_return({})
       subject.add_query(nil, nil)
     end
@@ -33,9 +33,9 @@ describe SalesforceBulk::Connection do
 
   describe '#add_batch' do
     it 'should delegate correctly to underlying classes' do
-      SalesforceBulk::Http.should_receive(:add_batch).
+      Executrix::Http.should_receive(:add_batch).
           and_return({})
-      SalesforceBulk::Helper.should_receive(:records_to_csv).
+      Executrix::Helper.should_receive(:records_to_csv).
         and_return('My,Awesome,CSV')
       subject.add_batch(nil, 'non emtpy records')
     end

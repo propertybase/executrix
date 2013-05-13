@@ -1,15 +1,15 @@
-require 'salesforce_bulk/version'
-require 'salesforce_bulk/helper'
-require 'salesforce_bulk/batch'
-require 'salesforce_bulk/http'
-require 'salesforce_bulk/connection'
+require 'executrix/version'
+require 'executrix/helper'
+require 'executrix/batch'
+require 'executrix/http'
+require 'executrix/connection'
 
-module SalesforceBulk
+module Executrix
   class Api
     SALESFORCE_API_VERSION = '27.0'
 
     def initialize(username, password, sandbox = false, api_version = SALESFORCE_API_VERSION)
-      @connection = SalesforceBulk::Connection.connect(
+      @connection = Executrix::Connection.connect(
         username,
         password,
         api_version,
@@ -39,7 +39,7 @@ module SalesforceBulk
         nil)
       batch_id = @connection.add_query(job_id, query)
       @connection.close_job job_id
-      batch_reference = SalesforceBulk::Batch.new @connection, job_id, batch_id
+      batch_reference = Executrix::Batch.new @connection, job_id, batch_id
       batch_reference.init_result_id
       batch_reference.final_status
     end
@@ -52,7 +52,7 @@ module SalesforceBulk
         external_field)
       batch_id = @connection.add_batch job_id, records
       @connection.close_job job_id
-      SalesforceBulk::Batch.new @connection, job_id, batch_id
+      Executrix::Batch.new @connection, job_id, batch_id
     end
   end
 end

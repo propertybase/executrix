@@ -1,18 +1,18 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'salesforce_bulk/version'
+require 'executrix/version'
 
 Gem::Specification.new do |gem|
-  gem.name        = 'salesforce_bulk'
-  gem.version     = SalesforceBulk::VERSION
+  gem.name        = 'executrix'
+  gem.version     = Executrix::VERSION
   gem.authors     = ["Jorge Valdivia"]
   gem.email       = ["jorge@valdivia.me"]
-  gem.homepage    = 'https://github.com/jorgevaldivia/salesforce_bulk'
+  gem.homepage    = 'https://github.com/propertybase/executrix'
   gem.summary     = %q{Ruby support for the Salesforce Bulk API}
   gem.description = %q{This gem provides a super simple interface for the Salesforce Bulk API. It provides support for insert, update, upsert, delete, and query.}
 
-  gem.rubyforge_project = 'salesforce_bulk'
+  gem.rubyforge_project = 'executrix'
 
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})

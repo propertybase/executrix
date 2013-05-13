@@ -1,9 +1,9 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe SalesforceBulk::Api do
+describe Executrix::Api do
   let(:empty_connection) do
-    SalesforceBulk::Connection.new(nil, nil, nil, nil)
+    Executrix::Connection.new(nil, nil, nil, nil)
   end
 
   let(:empty_batch) do
@@ -18,7 +18,7 @@ describe SalesforceBulk::Api do
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'should delegate to #start_job' do
-        SalesforceBulk::Connection.
+        Executrix::Connection.
           should_receive(:connect).
           and_return(empty_connection)
         s = described_class.new(nil, nil)
@@ -28,7 +28,7 @@ describe SalesforceBulk::Api do
       end
 
       it 'should trigger correct workflow' do
-        SalesforceBulk::Connection.
+        Executrix::Connection.
           should_receive(:connect).
           and_return(empty_connection)
         s = described_class.new(nil, nil)
@@ -36,17 +36,17 @@ describe SalesforceBulk::Api do
         empty_connection.should_receive(:add_batch).ordered
         empty_connection.should_receive(:close_job).ordered
         res = s.send(method_name, *Array.new(num_of_params))
-        expect(res).to be_a(SalesforceBulk::Batch)
+        expect(res).to be_a(Executrix::Batch)
       end
     end
   end
 
   describe '#query' do
     it 'should trigger correct workflow' do
-      SalesforceBulk::Connection.
+      Executrix::Connection.
           should_receive(:connect).
           and_return(empty_connection)
-      SalesforceBulk::Batch.
+      Executrix::Batch.
         should_receive(:new).
         and_return(empty_batch)
 

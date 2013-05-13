@@ -1,10 +1,10 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe SalesforceBulk::Http do
+describe Executrix::Http do
   describe '#process_http_request' do
     let(:post_request) do 
-      SalesforceBulk::Http::Request.new(
+      Executrix::Http::Request.new(
         :post,
         'test.host',
         '/',
@@ -13,7 +13,7 @@ describe SalesforceBulk::Http do
     end
   
     let(:get_request) do 
-      SalesforceBulk::Http::Request.new(:get, 'test.host', '/', '', [])
+      Executrix::Http::Request.new(:get, 'test.host', '/', '', [])
     end
   
     it 'should return a response object' do
@@ -23,7 +23,7 @@ describe SalesforceBulk::Http do
             body: post_request.body,
             headers: post_request.headers).
           to_return(:body => expected_body)
-       res = SalesforceBulk::Http.process_http_request(post_request)
+       res = Executrix::Http.process_http_request(post_request)
        expect(res).to eq(expected_body)
     end
   end
@@ -141,17 +141,17 @@ describe SalesforceBulk::Http do
     end
 
     it 'should raise an error for faulty login' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(login_error)
-      expect{ SalesforceBulk::Http.login('a','b','c', 'd') }.
+      expect{ Executrix::Http.login('a','b','c', 'd') }.
         to raise_error(RuntimeError, login_error_message)
     end
 
     it 'should return hash for correct login' do
       [login_success, login_success_new].each do |login_response|
-        SalesforceBulk::Http.should_receive(:process_http_request).
+        Executrix::Http.should_receive(:process_http_request).
           and_return(login_response)
-        result = SalesforceBulk::Http.login('a','b','c', 'd')
+        result = Executrix::Http.login('a','b','c', 'd')
         expect(result).to be_a(Hash)
         expect(result).to have_key(:session_id)
         expect(result).to have_key(:server_url)
@@ -190,9 +190,9 @@ describe SalesforceBulk::Http do
     end
 
     it 'should return hash for creating job' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(create_job_success)
-      result = SalesforceBulk::Http.create_job('a','b','c','d', 'e')
+      result = Executrix::Http.create_job('a','b','c','d', 'e')
       expect(result).to be_a(Hash)
       expect(result).to have_key(:id)
       expect(result).to have_key(:operation)
@@ -219,9 +219,9 @@ describe SalesforceBulk::Http do
     end
 
     it 'should return hash for adding batch' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(add_batch_success)
-      result = SalesforceBulk::Http.add_batch(:post,'a','b','c','d')
+      result = Executrix::Http.add_batch(:post,'a','b','c','d')
       expect(result).to be_a(Hash)
       expect(result).to have_key(:id)
       expect(result).to have_key(:job_id)
@@ -259,9 +259,9 @@ describe SalesforceBulk::Http do
     end
 
     it 'should return hash for closing job' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(close_job_success)
-      result = SalesforceBulk::Http.close_job('a','b','c','d')
+      result = Executrix::Http.close_job('a','b','c','d')
       expect(result).to be_a(Hash)
       expect(result).to have_key(:id)
       expect(result).to have_key(:object)
@@ -281,9 +281,9 @@ describe SalesforceBulk::Http do
     end
 
     it 'should raise an exception on faulty authorization' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(invalid_session_id)
-      expect{SalesforceBulk::Http.query_batch('a','b','c','d','e')}.
+      expect{Executrix::Http.query_batch('a','b','c','d','e')}.
         to raise_error(RuntimeError, 'InvalidSessionId: Invalid session id')
     end
   end
@@ -296,9 +296,9 @@ describe SalesforceBulk::Http do
     end
 
     it 'should return hash including the result id' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(batch_result_success)
-      result = SalesforceBulk::Http.query_batch_result_id('a','b','c','d','e')
+      result = Executrix::Http.query_batch_result_id('a','b','c','d','e')
       expect(result).to be_a(Hash)
       expect(result).to have_key(:result)
     end
@@ -318,18 +318,18 @@ describe SalesforceBulk::Http do
     end
 
     it 'should return array of arrays for data' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(batch_result_data_success)
-      result = SalesforceBulk::Http.query_batch_result_data('a','b','c','d','e','f')
+      result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
       expect(result).to eq([
         {'Id' => '003M000057GH39aIAD', 'my_external_id__c' => 'K-00J799'},
         {'Id' => '003M001200KO82cIAD', 'my_external_id__c' => 'K-015699'}])
     end
 
     it 'should return correct array with spaces' do
-      SalesforceBulk::Http.should_receive(:process_http_request).
+      Executrix::Http.should_receive(:process_http_request).
         and_return(batch_result_data_with_spaces_success)
-      result = SalesforceBulk::Http.query_batch_result_data('a','b','c','d','e','f')
+      result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
       expect(result).to eq([
         {'Id' => '003K000057GH39aIAD', 'Name' => 'Master of Disaster'},
         {'Id' => '003K001200KO82cIAD', 'Name' => 'King of the  Hill'}])

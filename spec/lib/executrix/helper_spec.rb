@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe SalesforceBulk::Helper do
+describe Executrix::Helper do
   describe '.records_to_csv' do
     it 'should return valid csv for single record' do
       input = [

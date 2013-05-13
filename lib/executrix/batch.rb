@@ -1,4 +1,4 @@
-module SalesforceBulk
+module Executrix
   class Batch
     def initialize connection, job_id, batch_id
       @connection = connection

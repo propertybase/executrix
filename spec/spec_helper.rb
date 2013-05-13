@@ -6,7 +6,7 @@ SimpleCov.start do
   add_filter 'spec'
 end
 
-require 'salesforce_bulk'
+require 'executrix'
 require 'webmock/rspec'
 
 RSpec.configure do |config|

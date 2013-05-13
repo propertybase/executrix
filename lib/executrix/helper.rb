@@ -1,6 +1,6 @@
 require 'csv'
 
-module SalesforceBulk
+module Executrix
   module Helper
     extend self
 

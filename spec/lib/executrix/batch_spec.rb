@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe SalesforceBulk::Batch do
+describe Executrix::Batch do
   describe '#final_status' do
     it 'should return the final status if it already exists' do
       b = described_class.new nil, nil, nil

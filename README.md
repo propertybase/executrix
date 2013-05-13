@@ -1,13 +1,13 @@
-# salesforce_bulk
+# executrix
 
 ## Overview
 
-Salesforce bulk is a simple ruby gem for connecting to and using the [Salesforce Bulk API](http://www.salesforce.com/us/developer/docs/api_asynch/index.htm). There are already some gems out there that provide connectivity to the Salesforce SOAP and Rest APIs, if your needs are simple, I recommend using those, specifically raygao's [asf-rest-adapter](https://github.com/raygao/asf-rest-adapter) or [databasedotcom](https://rubygems.org/gems/databasedotcom).
+Executrix is a simple ruby gem for connecting to and using the [Salesforce Bulk API](http://www.salesforce.com/us/developer/docs/api_asynch/index.htm). This gem only supports the functionality provided by the bulk API
 
 ## Installation
 
 ~~~ sh
-$ sudo gem install salesforce_bulk
+$ sudo gem install executrix
 ~~~
 
 ## How to use
@@ -17,14 +17,14 @@ Using this gem is simple and straight forward.
 To initialize:
 
 ~~~ ruby
-require 'salesforce_bulk'
-salesforce = SalesforceBulk::Api.new("YOUR_SALESFORCE_USERNAME", "YOUR_SALESFORCE_PASSWORD+YOUR_SALESFORCE_TOKEN")
+require 'executrix'
+salesforce = Executrix::Api.new("YOUR_SALESFORCE_USERNAME", "YOUR_SALESFORCE_PASSWORD+YOUR_SALESFORCE_TOKEN")
 ~~~
 
 To use sandbox:
 
 ~~~ ruby
-salesforce = SalesforceBulk::Api.new("YOUR_SALESFORCE_SANDBOX_USERNAME", "YOUR_SALESFORCE_PASSWORD+YOUR_SALESFORCE_SANDBOX_TOKEN", true)
+salesforce = Executrix::Api.new("YOUR_SALESFORCE_SANDBOX_USERNAME", "YOUR_SALESFORCE_PASSWORD+YOUR_SALESFORCE_SANDBOX_TOKEN", true)
 ~~~
 
 Note: the second parameter is a combination of your Salesforce token and password. So if your password is xxxx and your token is yyyy, the second parameter will be xxxxyyyy
@@ -33,10 +33,10 @@ Sample operations:
 
 ~~~ ruby
 # Insert
-new_account = Hash["name" => "Test Account", "type" => "Other"] # Add as many fields per record as needed.
-records_to_insert = Array.new
-records_to_insert.push(new_account) # You can add as many records as you want here, just keep in mind that Salesforce has governor limits.
-result = salesforce.insert("Account", records_to_insert)
+new_account = {"name" => "Test Account", "type" => "Other"} # Add as many fields per record as needed.
+records_to_insert = []
+records_to_insert << new_account # You can add as many records as you want here, just keep in mind that Salesforce has governor limits.
+result = salesforce.insert("Account", records_to_insert).final_status
 puts "result is: #{result.inspect}"
 ~~~
 

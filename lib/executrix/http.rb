@@ -2,7 +2,7 @@ require 'net/https'
 require 'nori'
 require 'csv'
 
-module SalesforceBulk
+module Executrix
   module Http
     extend self
 
