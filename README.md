@@ -1,5 +1,7 @@
 # Executrix
 
+[![Build Status](https://travis-ci.org/propertybase/executrix.png?branch=master)](https://travis-ci.org/propertybase/executrix) [![Coverage Status](https://coveralls.io/repos/propertybase/executrix/badge.png?branch=master)](https://coveralls.io/r/propertybase/executrix) [![Code Climate](https://codeclimate.com/github/propertybase/executrix.png)](https://codeclimate.com/github/propertybase/executrix) [![Dependency Status](https://gemnasium.com/propertybase/executrix.png)](https://gemnasium.com/propertybase/executrix) [![Gem Version](https://badge.fury.io/rb/executrix.png)](http://badge.fury.io/rb/executrix)
+
 DISCLAIMER: This gem is a rewrite of the [salesforce_bulk](https://github.com/jorgevaldivia/salesforce_bulk) gem. As the original maintainer didn't respon to my [pull-request](https://github.com/jorgevaldivia/salesforce_bulk/pull/14) I decided to rerelease the gem under different name.
 
 The original Copyright Notice and all the original commit logs have been retained.
