@@ -1,6 +1,6 @@
 # Executrix
 
-DISCLAIMER: This gem is a rewrite of the [salesforce_bulk](https://github.com/jorgevaldivia/salesforce_bulk) gem. As the original maintainer didn't respon to my [pull-request](https://github.com/jorgevaldivia/salesforce_bulk/pull/14) I decided to rerelease the gem under different name. This is it.
+DISCLAIMER: This gem is a rewrite of the [salesforce_bulk](https://github.com/jorgevaldivia/salesforce_bulk) gem. As the original maintainer didn't respon to my [pull-request](https://github.com/jorgevaldivia/salesforce_bulk/pull/14) I decided to rerelease the gem under different name.
 
 The original Copyright Notice and all the original commit logs have been retained.
 
