@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'rake'
-  gem.add_dependency 'nori', '~> 2.0'
+  gem.add_dependency 'nori', '~> 2.2'
   gem.add_dependency 'nokogiri', '~> 1.5'
   gem.add_development_dependency 'rspec', '~> 2.13'
   gem.add_development_dependency 'webmock', '~> 1.11'
