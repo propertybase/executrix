@@ -6,8 +6,8 @@ require 'executrix/version'
 Gem::Specification.new do |gem|
   gem.name        = 'executrix'
   gem.version     = Executrix::VERSION
-  gem.authors     = ["Jorge Valdivia"]
-  gem.email       = ["jorge@valdivia.me"]
+  gem.authors     = ['Jorge Valdivia', 'Leif Gensert']
+  gem.email       = ['jorge@valdivia.me', 'leif@propertybase.com']
   gem.homepage    = 'https://github.com/propertybase/executrix'
   gem.summary     = %q{Ruby support for the Salesforce Bulk API}
   gem.description = %q{This gem provides a super simple interface for the Salesforce Bulk API. It provides support for insert, update, upsert, delete, and query.}
