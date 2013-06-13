@@ -18,19 +18,19 @@ describe Executrix::Api do
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'should delegate to #start_job' do
-        Executrix::Connection.
-          should_receive(:connect).
-          and_return(empty_connection)
+        Executrix::Connection
+          .should_receive(:connect)
+          .and_return(empty_connection)
         s = described_class.new(nil, nil)
-        s.should_receive(:start_job).
-          with(method_name.to_s, *Array.new(num_of_params))
+        s.should_receive(:start_job)
+          .with(method_name.to_s, *Array.new(num_of_params))
         s.send(method_name, *Array.new(num_of_params))
       end
 
       it 'should trigger correct workflow' do
-        Executrix::Connection.
-          should_receive(:connect).
-          and_return(empty_connection)
+        Executrix::Connection
+          .should_receive(:connect)
+          .and_return(empty_connection)
         s = described_class.new(nil, nil)
         empty_connection.should_receive(:create_job).ordered
         empty_connection.should_receive(:add_batch).ordered
@@ -43,12 +43,12 @@ describe Executrix::Api do
 
   describe '#query' do
     it 'should trigger correct workflow' do
-      Executrix::Connection.
-          should_receive(:connect).
-          and_return(empty_connection)
-      Executrix::Batch.
-        should_receive(:new).
-        and_return(empty_batch)
+      Executrix::Connection
+          .should_receive(:connect)
+          .and_return(empty_connection)
+      Executrix::Batch
+        .should_receive(:new)
+        .and_return(empty_batch)
 
       s = described_class.new(nil, nil)
       sobject_input = 'sobject_stub'
