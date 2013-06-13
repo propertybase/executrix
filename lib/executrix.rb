@@ -6,7 +6,7 @@ require 'executrix/connection'
 
 module Executrix
   class Api
-    SALESFORCE_API_VERSION = '27.0'
+    SALESFORCE_API_VERSION = '28.0'
 
     def initialize(username, password, sandbox = false, api_version = SALESFORCE_API_VERSION)
       @connection = Executrix::Connection.connect(
