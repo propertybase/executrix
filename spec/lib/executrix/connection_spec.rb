@@ -11,7 +11,6 @@ describe Executrix::Connection do
     query_batch: 2,
     query_batch_result_id: 2,
     query_batch_result_data: 3,
-
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'should delegate correctly to Http class' do
@@ -30,6 +29,21 @@ describe Executrix::Connection do
       subject.add_query(nil, nil)
     end
   end
+
+  describe '#org_id' do
+    it 'should raise exception when not logged in' do
+      expect {subject.org_id}.to raise_error(RuntimeError)
+    end
+
+    it 'should return correct OrgId after login' do
+      org_id = '00D50000000IehZ'
+      Executrix::Http
+      .should_receive(:login)
+      .and_return({session_id: "#{org_id}!AQcAQH0dMHZfz972Szmpkb58urFRkgeBGsxL_QJWwYMfAbUeeG7c1E6LYUfiDUkWe6H34r1AAwOR8B8fLEz6n04NPGRrq0FM"})
+      expect(subject.login.org_id).to eq(org_id)
+    end
+  end
+
 
   describe '#add_batch' do
     it 'should delegate correctly to underlying classes' do
