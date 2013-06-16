@@ -19,6 +19,11 @@ module Executrix
       self
     end
 
+    def org_id
+      raise 'please login first' unless @session_id
+      @session_id.split('!').first
+    end
+
     def create_job operation, sobject, external_field
       Executrix::Http.create_job(
         @instance,
