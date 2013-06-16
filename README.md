@@ -35,9 +35,11 @@ salesforce = Executrix::Api.new('YOUR_SALESFORCE_SANDBOX_USERNAME', 'YOUR_SALESF
 
 Note: the second parameter is a combination of your Salesforce token and password. So if your password is xxxx and your token is yyyy, the second parameter will be xxxxyyyy
 
-#### org_id
+#### OrgId
 
 After you created the client object you can fetch the OrgId via `org_id`.
+
+This will fetch the 15 digit OrgId.
 
 ~~~ ruby
 salesforce.org_id # '00D50000000IehZ'
