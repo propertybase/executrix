@@ -16,6 +16,10 @@ module Executrix
         sandbox)
     end
 
+    def org_id
+      @connection.org_id
+    end
+
     def upsert(sobject, records, external_field)
       start_job('upsert', sobject, records, external_field)
     end
