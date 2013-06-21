@@ -1,3 +1,7 @@
+## 1.1.1 (June 21th, 2013)
+
+- Now really make OrgId accessible
+
 ## 1.1.0 (June 16th, 2013)
 
 - Add possibility to fetch OrgId after login
