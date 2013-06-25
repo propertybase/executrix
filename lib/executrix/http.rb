@@ -115,7 +115,7 @@ module Executrix
         host = sandbox ? 'test.salesforce.com' : 'login.salesforce.com'
         Http::Request.new(
           :post,
-          host,
+          generic_host(sandbox ? 'test' : 'login'),
           "/services/Soap/u/#{api_version}",
           body,
           headers)
@@ -137,7 +137,7 @@ module Executrix
           'X-SFDC-Session' => session_id}
         Http::Request.new(
           :post,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}/job",
           body,
           headers)
@@ -154,7 +154,7 @@ module Executrix
           'X-SFDC-Session' => session_id}
         Http::Request.new(
           :post,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}/job/#{job_id}",
           body,
           headers)
@@ -164,7 +164,7 @@ module Executrix
         headers = {'Content-Type' => 'text/csv; charset=UTF-8', 'X-SFDC-Session' => session_id}
         Http::Request.new(
           :post,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}/job/#{job_id}/batch",
           data,
           headers)
@@ -174,7 +174,7 @@ module Executrix
         headers = {'X-SFDC-Session' => session_id}
         Http::Request.new(
           :get,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}/job/#{job_id}/batch/#{batch_id}",
           nil,
           headers)
@@ -186,7 +186,7 @@ module Executrix
           'X-SFDC-Session' => session_id}
         Http::Request.new(
           :get,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}/job/#{job_id}/batch/#{batch_id}/result",
           nil,
           headers)
@@ -203,11 +203,16 @@ module Executrix
           'X-SFDC-Session' => session_id}
         Http::Request.new(
           :get,
-          "#{instance}.salesforce.com",
+          generic_host(instance),
           "/services/async/#{api_version}" \
             "/job/#{job_id}/batch/#{batch_id}/result/#{result_id}",
           nil,
           headers)
+      end
+
+      private
+      def self.generic_host prefix
+        "#{prefix}.salesforce.com"
       end
     end
   end
