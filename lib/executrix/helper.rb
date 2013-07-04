@@ -34,7 +34,8 @@ module Executrix
     end
 
     def fetch_instance_from_server_url server_url
-      server_url[/^https?:\/\/(\w+)(-api)?/, 1]
+      before_sf = server_url[/^https?:\/\/(.+)\.salesforce\.com/, 1]
+      before_sf.gsub(/-api$/,'')
     end
   end
 end
