@@ -61,4 +61,15 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
   end
+
+  describe '.fetch_instance_from_server_url' do
+    let(:basic_server_url) {
+      'https://cs7-api.salesforce.com/services/Soap/u/27.0/00EU00000095Y5b'
+    }
+
+    it 'should return correct instance for regular salesforce instance' do
+      expect(described_class.fetch_instance_from_server_url(basic_server_url))
+        .to eq('cs7')
+    end
+  end
 end

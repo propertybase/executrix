@@ -77,7 +77,7 @@ module Executrix
       raise raw_result[:fault][:faultstring] if raw_result[:fault]
 
       login_result = raw_result[:login_response][:result]
-      instance = login_result[:server_url][/^https?:\/\/(\w+)(-api)?/, 1]
+      instance = Helper.fetch_instance_from_server_url(login_result[:server_url])
       login_result.merge(instance: instance)
     end
 

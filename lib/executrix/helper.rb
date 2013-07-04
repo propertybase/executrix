@@ -32,5 +32,9 @@ module Executrix
       end
       file_mock.string
     end
+
+    def fetch_instance_from_server_url server_url
+      server_url[/^https?:\/\/(\w+)(-api)?/, 1]
+    end
   end
 end
