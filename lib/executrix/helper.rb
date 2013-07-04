@@ -32,5 +32,10 @@ module Executrix
       end
       file_mock.string
     end
+
+    def fetch_instance_from_server_url server_url
+      before_sf = server_url[/^https?:\/\/(.+)\.salesforce\.com/, 1]
+      before_sf.gsub(/-api$/,'')
+    end
   end
 end
