@@ -112,7 +112,6 @@ module Executrix
           'Content-Type' => 'text/xml; charset=utf-8',
           'SOAPAction' => 'login'
         }
-        host = sandbox ? 'test.salesforce.com' : 'login.salesforce.com'
         Http::Request.new(
           :post,
           generic_host(sandbox ? 'test' : 'login'),
