@@ -61,4 +61,33 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
   end
+
+  describe '.fetch_instance_from_server_url' do
+    let(:basic_api_server_url) {
+      'https://cs7-api.salesforce.com/services/Soap/u/28.0/00CS00000095Y5b'
+    }
+
+    let(:basic_server_url) {
+      'https://eu1.salesforce.com/services/Soap/u/28.0/00EU00000096Y8c'
+    }
+
+    let(:named_server_url) {
+      'https://supercustomname.my.salesforce.com/services/Soap/u/28.0/00EH0000001jNQu'
+    }
+
+    it 'should return correct instance for regular salesforce server url' do
+      expect(described_class.fetch_instance_from_server_url(basic_server_url))
+        .to eq('eu1')
+    end
+
+    it 'should return correct instance for api salesforce server url' do
+      expect(described_class.fetch_instance_from_server_url(basic_api_server_url))
+        .to eq('cs7')
+    end
+
+    it 'should return correct instance for named salesforce server url' do
+      expect(described_class.fetch_instance_from_server_url(named_server_url))
+        .to eq('supercustomname.my')
+    end
+  end
 end
