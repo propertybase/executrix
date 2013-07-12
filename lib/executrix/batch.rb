@@ -34,18 +34,17 @@ module Executrix
       @connection.query_batch @job_id, @batch_id
     end
 
-    # only needed for query
-    def init_result_id
-      max_retries = 5
-      retry_count = 0
-      while @result_id.nil? && retry_count < max_retries
-        @result_id = @connection.query_batch_result_id(@job_id, @batch_id)[:result]
-        retry_count += 1
-      end
+    def results
+      init_result_id
+      @connection.query_batch_result_data(@job_id, @batch_id, @result_id)
     end
 
-    def results
-      @connection.query_batch_result_data(@job_id, @batch_id, @result_id)
+    private
+    def init_result_id
+      result_raw = @connection.query_batch_result_id(@job_id, @batch_id)
+      if result_raw
+        @result_id = result_raw[:result]
+      end
     end
   end
 end
