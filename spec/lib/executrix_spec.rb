@@ -56,7 +56,6 @@ describe Executrix::Api do
       empty_connection.should_receive(:create_job).ordered
       empty_connection.should_receive(:add_query).ordered
       empty_connection.should_receive(:close_job).ordered
-      empty_batch.should_receive(:init_result_id).ordered
       empty_batch.should_receive(:final_status).ordered
       s.query(sobject_input, query_input)
     end
