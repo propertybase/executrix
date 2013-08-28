@@ -37,5 +37,13 @@ module Executrix
       before_sf = server_url[/^https?:\/\/(.+)\.salesforce\.com/, 1]
       before_sf.gsub(/-api$/,'')
     end
+
+    def attachment_keys records
+      records.map do |record|
+        record.select do |key, value|
+          value.class == File
+        end.keys
+      end.flatten.uniq
+    end
   end
 end

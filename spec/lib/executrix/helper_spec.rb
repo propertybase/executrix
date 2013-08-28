@@ -90,4 +90,61 @@ describe Executrix::Helper do
         .to eq('supercustomname.my')
     end
   end
+
+  describe '.attachment_keys' do
+    let(:records_with_attachment) do
+      [
+        {
+          'normal_key' => 'normal_value1',
+          'attachment_key' => nil,
+        },
+        {
+          'normal_key' => 'normal_value2',
+          'attachment_key' => File.new('.'),
+        }
+      ]
+    end
+
+    let(:records_with_multiple_attachment) do
+      [
+        {
+          'normal_key' => 'normal_value1',
+          'attachment_key' => File.new('.'),
+          'another_attachment_key' => File.new('.'),
+        },
+        {
+          'normal_key' => 'normal_value2',
+          'attachment_key' => File.new('.'),
+        }
+      ]
+    end
+
+    let(:records_without_attachment) do
+      [
+        {
+          'normal_key' => 'normal_value1',
+          'another_normal_key' => 'another_normal_value1',
+        },
+        {
+          'normal_key' => 'normal_value2',
+          'another_normal_key' => 'another_normal_value2',
+        }
+      ]
+    end
+
+    it 'returns correct keys for single attachment key' do
+      expect(described_class.attachment_keys(records_with_attachment))
+        .to eq(['attachment_key'])
+    end
+
+    it 'returns correct keys for multiple attachment keys' do
+      expect(described_class.attachment_keys(records_with_multiple_attachment))
+        .to eq(['attachment_key', 'another_attachment_key'])
+    end
+
+    it 'returns false for no attachment' do
+      expect(described_class.attachment_keys(records_without_attachment))
+        .to eq([])
+    end
+  end
 end
