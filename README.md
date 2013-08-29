@@ -86,6 +86,16 @@ res = salesforce.query('Account', 'select id, name, createddate from Account lim
 puts res.result.records.inspect
 ~~~
 
+## File Upload
+
+For file uploads, just add a `File` object to the binary columns.
+~~~ ruby
+attachment = {'ParentId' => '00Kk0001908kqkDEAQ', 'Name' => 'attachment.pdf', 'Body' => File.new('tmp/attachment.pdf')}
+records_to_insert = []
+records_to_insert << attachment
+salesforce.insert('Attachment', records_to_insert)
+~~~
+
 ### Query status
 
 The above examples all return immediately after sending the data to the Bulk API. If you want to wait, until the batch finished, call the final_status method on the batch-reference.

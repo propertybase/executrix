@@ -24,12 +24,13 @@ module Executrix
       @session_id.split('!').first
     end
 
-    def create_job operation, sobject, external_field
+    def create_job operation, sobject, content_type, external_field
       Executrix::Http.create_job(
         @instance,
         @session_id,
         operation,
         sobject,
+        content_type,
         @api_version,
         external_field)[:id]
     end
@@ -80,6 +81,15 @@ module Executrix
         result_id,
         @api_version,
       )
+    end
+
+    def add_file_upload_batch job_id, filename
+      Executrix::Http.add_file_upload_batch(
+        @instance,
+        @session_id,
+        job_id,
+        filename,
+        @api_version)[:id]
     end
 
     def add_batch job_id, records
