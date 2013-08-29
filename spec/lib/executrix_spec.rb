@@ -63,10 +63,12 @@ describe Executrix::Api do
 
   context 'file upload' do
     describe '#insert' do
+      prefix = Dir.tmpdir
+      FileUtils.touch("#{prefix}/attachment.pdf")
       attachment_data = {
         'ParentId' => '00Kk0001908kqkDEAQ',
         'Name' => 'attachment.pdf',
-        'Body' => File.new('.')
+        'Body' => File.new("#{prefix}/attachment.pdf")
       }
 
       {

@@ -93,6 +93,8 @@ describe Executrix::Helper do
 
   describe '.attachment_keys' do
     let(:records_with_attachment) do
+      prefix = Dir.tmpdir
+      FileUtils.touch("#{prefix}/attachment.pdf")
       [
         {
           'normal_key' => 'normal_value1',
@@ -100,21 +102,25 @@ describe Executrix::Helper do
         },
         {
           'normal_key' => 'normal_value2',
-          'attachment_key' => File.new('.'),
+          'attachment_key' => File.new("#{prefix}/attachment.pdf"),
         }
       ]
     end
 
     let(:records_with_multiple_attachment) do
+      prefix = Dir.tmpdir
+      FileUtils.touch("#{prefix}/attachment1.pdf")
+      FileUtils.touch("#{prefix}/attachment2.pdf")
+      FileUtils.touch("#{prefix}/attachment3.pdf")
       [
         {
           'normal_key' => 'normal_value1',
-          'attachment_key' => File.new('.'),
-          'another_attachment_key' => File.new('.'),
+          'attachment_key' => File.new("#{prefix}/attachment1.pdf"),
+          'another_attachment_key' => File.new("#{prefix}/attachment2.pdf"),
         },
         {
           'normal_key' => 'normal_value2',
-          'attachment_key' => File.new('.'),
+          'attachment_key' => File.new("#{prefix}/attachment3.pdf"),
         }
       ]
     end
@@ -150,6 +156,8 @@ describe Executrix::Helper do
 
   describe '.transform_values!' do
     let(:records_with_attachment) do
+      prefix = Dir.tmpdir
+      FileUtils.touch("#{prefix}/attachment.pdf")
       [
         {
           'normal_key' => 'normal_value1',
@@ -157,7 +165,7 @@ describe Executrix::Helper do
         },
         {
           'normal_key' => 'normal_value2',
-          'attachment_key' => File.new('.'),
+          'attachment_key' => File.new("#{prefix}/attachment.pdf"),
         }
       ]
     end
