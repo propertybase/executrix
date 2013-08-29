@@ -51,7 +51,7 @@ describe Executrix::Connection do
           .and_return({})
       Executrix::Helper.should_receive(:records_to_csv)
         .and_return('My,Awesome,CSV')
-      subject.add_batch(nil, 'non emtpy records')
+      subject.add_batch(nil, [{'non_emtpy' => 'records'}])
     end
 
     it 'should return -1 for nil input' do
