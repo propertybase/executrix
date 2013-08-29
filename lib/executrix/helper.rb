@@ -45,5 +45,18 @@ module Executrix
         end.keys
       end.flatten.uniq
     end
+
+    def transform_values! records, keys
+      keys.each do |key|
+        records.each do |record|
+          file_handle = record[key]
+          if file_handle
+            file_path = File.absolute_path(file_handle)
+            record.merge!(key => file_path.gsub(/^\//,''))
+            yield file_path if block_given?
+          end
+        end
+      end
+    end
   end
 end

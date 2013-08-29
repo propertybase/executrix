@@ -85,6 +85,17 @@ module Executrix
     def add_batch job_id, records
       return -1 if records.nil? || records.empty?
 
+      attachment_keys = Executrix::Helper.attachment_keys(records)
+      if not attachment_keys.empty?
+        attachment_keys.each do |key|
+          file_handle = record[key]
+          if file_handle
+            # TODO add to zip
+            record[key] = File.absolute_path(file_handle)
+          end
+        end
+      end
+
       Executrix::Http.add_batch(
         @instance,
         @session_id,

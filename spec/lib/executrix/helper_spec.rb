@@ -147,4 +147,45 @@ describe Executrix::Helper do
         .to eq([])
     end
   end
+
+  describe '.transform_values!' do
+    let(:records_with_attachment) do
+      [
+        {
+          'normal_key' => 'normal_value1',
+          'attachment_key' => nil,
+        },
+        {
+          'normal_key' => 'normal_value2',
+          'attachment_key' => File.new('.'),
+        }
+      ]
+    end
+
+    it 'should transform values correctly' do
+      expect(File).to receive(:absolute_path).and_return('/an/absolute/path')
+      expected_output = [
+        {
+          'normal_key' => 'normal_value1',
+          'attachment_key' => nil,
+        },
+        {
+          'normal_key' => 'normal_value2',
+          'attachment_key' => 'an/absolute/path',
+        }
+      ]
+
+      input = records_with_attachment
+      described_class.transform_values!(input,['attachment_key'])
+      expect(input).to eq(expected_output)
+    end
+
+    it 'should yield absolute path' do
+      expect(File).to receive(:absolute_path).and_return('/an/absolute/path')
+      input = records_with_attachment
+      expect do |blk|
+        described_class.transform_values!(input,['attachment_key'], &blk)
+      end.to yield_with_args('/an/absolute/path')
+    end
+  end
 end
