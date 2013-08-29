@@ -24,12 +24,13 @@ module Executrix
       @session_id.split('!').first
     end
 
-    def create_job operation, sobject, external_field
+    def create_job operation, sobject, content_type, external_field
       Executrix::Http.create_job(
         @instance,
         @session_id,
         operation,
         sobject,
+        content_type,
         @api_version,
         external_field)[:id]
     end
@@ -82,19 +83,18 @@ module Executrix
       )
     end
 
+    def upload_file job_id, filename
+      Executrix::Http.upload_file(
+        @instance,
+        @session_id,
+        job_id,
+        filename,
+        @api_version,
+      )
+    end
+
     def add_batch job_id, records
       return -1 if records.nil? || records.empty?
-
-      attachment_keys = Executrix::Helper.attachment_keys(records)
-      if not attachment_keys.empty?
-        attachment_keys.each do |key|
-          file_handle = record[key]
-          if file_handle
-            # TODO add to zip
-            record[key] = File.absolute_path(file_handle)
-          end
-        end
-      end
 
       Executrix::Http.add_batch(
         @instance,

@@ -41,6 +41,20 @@ module Executrix
       process_csv_response(process_http_request(r))
     end
 
+    def upload_file instance, session_id, job_id, filename, api_version
+      data = File.read(filename)
+      headers = {
+        'Content-Type' => 'zip/csv',
+        'X-SFDC-Session' => session_id}
+      r = Http::Request.new(
+        :post,
+        Http::Request.generic_host(instance),
+        "/services/async/#{api_version}/job/#{job_id}/batch",
+        data,
+        headers)
+      process_http_request(r)
+    end
+
     def process_http_request(r)
       http = Net::HTTP.new(r.host, 443)
       http.use_ssl = true
@@ -120,7 +134,7 @@ module Executrix
           headers)
       end
 
-      def self.create_job instance, session_id, operation, sobject, api_version, external_field = nil
+      def self.create_job instance, session_id, operation, sobject, content_type, api_version, external_field = nil
         external_field_line = external_field ?
           "<externalIdFieldName>#{external_field}</externalIdFieldName>" : nil
         body = %Q{<?xml version="1.0" encoding="utf-8" ?>
@@ -128,7 +142,7 @@ module Executrix
             <operation>#{operation}</operation>
             <object>#{sobject}</object>
             #{external_field_line}
-            <contentType>CSV</contentType>
+            <contentType>#{content_type}</contentType>
           </jobInfo>
         }
         headers = {
@@ -209,7 +223,6 @@ module Executrix
           headers)
       end
 
-      private
       def self.generic_host prefix
         "#{prefix}.salesforce.com"
       end

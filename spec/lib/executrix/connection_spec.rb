@@ -6,7 +6,7 @@ describe Executrix::Connection do
 
   {
     login: 0,
-    create_job: 3,
+    create_job: 4,
     close_job: 1,
     query_batch: 2,
     query_batch_result_id: 2,

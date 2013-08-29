@@ -52,7 +52,7 @@ module Executrix
           file_handle = record[key]
           if file_handle
             file_path = File.absolute_path(file_handle)
-            record.merge!(key => file_path.gsub(/^\//,''))
+            record.merge!(key => file_path.gsub(/^\//,'#'))
             yield file_path if block_given?
           end
         end

@@ -171,7 +171,7 @@ describe Executrix::Helper do
         },
         {
           'normal_key' => 'normal_value2',
-          'attachment_key' => 'an/absolute/path',
+          'attachment_key' => '#an/absolute/path',
         }
       ]
 
