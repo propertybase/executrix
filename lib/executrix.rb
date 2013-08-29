@@ -55,13 +55,17 @@ module Executrix
 
       content_type = 'CSV'
       zip_filename = nil
+      request_filename = nil
+      batch_id = -1
       if not attachment_keys.empty?
-        zip_filename = Dir::Tmpname.make_tmpname('bulk_upload', '.zip')
+        tmp_filename = Dir::Tmpname.make_tmpname('bulk_upload', '.zip')
+        zip_filename = "#{Dir.tmpdir}/#{tmp_filename}"
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
           Executrix::Helper.transform_values!(records, attachment_keys) do |path|
-            zipfile.add(path.gsub(/^\//,''), path)
+            zipfile.add(Executrix::Helper.absolute_to_relative_path(path, ''), path)
           end
-          request_filename = Dir::Tmpname.make_tmpname('request', '.txt')
+          tmp_filename = Dir::Tmpname.make_tmpname('request', '.txt')
+          request_filename = "#{Dir.tmpdir}/#{tmp_filename}"
           File.open(request_filename, 'w') do |file|
             file.write(Executrix::Helper.records_to_csv(records))
           end
@@ -77,7 +81,10 @@ module Executrix
         content_type,
         external_field)
       if zip_filename
-        @connection.upload_file(job_id, zip_filename)
+        batch_id = @connection.add_file_upload_batch job_id, zip_filename
+        [zip_filename, request_filename].each do |file|
+          File.delete(file) if file
+        end
       else
         batch_id = @connection.add_batch job_id, records
       end

@@ -41,7 +41,7 @@ module Executrix
       process_csv_response(process_http_request(r))
     end
 
-    def upload_file instance, session_id, job_id, filename, api_version
+    def add_file_upload_batch instance, session_id, job_id, filename, api_version
       data = File.read(filename)
       headers = {
         'Content-Type' => 'zip/csv',
@@ -52,7 +52,7 @@ module Executrix
         "/services/async/#{api_version}/job/#{job_id}/batch",
         data,
         headers)
-      process_http_request(r)
+      process_xml_response(nori.parse(process_http_request(r)))
     end
 
     def process_http_request(r)

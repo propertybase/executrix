@@ -83,14 +83,13 @@ module Executrix
       )
     end
 
-    def upload_file job_id, filename
-      Executrix::Http.upload_file(
+    def add_file_upload_batch job_id, filename
+      Executrix::Http.add_file_upload_batch(
         @instance,
         @session_id,
         job_id,
         filename,
-        @api_version,
-      )
+        @api_version)[:id]
     end
 
     def add_batch job_id, records

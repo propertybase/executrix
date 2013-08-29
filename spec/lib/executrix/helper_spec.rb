@@ -188,4 +188,25 @@ describe Executrix::Helper do
       end.to yield_with_args('/an/absolute/path')
     end
   end
+
+  describe '.absolute_to_relative_path' do
+    let(:unix_path) { '/a/unix/path' }
+    let(:windows_path_backslash) { 'C:\a\backslash\path' }
+    let(:windows_path_forwardslash) { 'C:/a/forwardslash/path' }
+
+    it 'strips unix path correctly' do
+      expect(described_class.absolute_to_relative_path(unix_path,'')).
+        to eq('a/unix/path')
+    end
+
+    it 'strips windows path with backslash correctly' do
+      expect(described_class.absolute_to_relative_path(windows_path_backslash,'')).
+        to eq('a\backslash\path')
+    end
+
+    it 'strips windows path with forwardslash correctly' do
+      expect(described_class.absolute_to_relative_path(windows_path_forwardslash,'')).
+        to eq('a/forwardslash/path')
+    end
+  end
 end

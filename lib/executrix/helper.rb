@@ -52,11 +52,18 @@ module Executrix
           file_handle = record[key]
           if file_handle
             file_path = File.absolute_path(file_handle)
-            record.merge!(key => file_path.gsub(/^\//,'#'))
+            record
+              .merge!({
+                key => Executrix::Helper.absolute_to_relative_path(file_path,'#')
+              })
             yield file_path if block_given?
           end
         end
       end
+    end
+
+    def absolute_to_relative_path input, replacement
+      input.gsub(/(^C:[\/\\])|(^\/)/,replacement)
     end
   end
 end
