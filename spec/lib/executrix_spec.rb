@@ -17,7 +17,7 @@ describe Executrix::Api do
     delete: [nil,[{'no' => 'value'}]],
   }.each do |method_name, values|
     describe "##{method_name}" do
-      it 'should delegate to #start_job' do
+      it 'delegates to #start_job' do
         Executrix::Connection
           .should_receive(:connect)
           .and_return(empty_connection)
@@ -27,7 +27,7 @@ describe Executrix::Api do
         s.send(method_name, *values)
       end
 
-      it 'should trigger correct workflow' do
+      it 'triggers correct workflow' do
         Executrix::Connection
           .should_receive(:connect)
           .and_return(empty_connection)
@@ -42,7 +42,7 @@ describe Executrix::Api do
   end
 
   describe '#query' do
-    it 'should trigger correct workflow' do
+    it 'triggers correct workflow' do
       Executrix::Connection
           .should_receive(:connect)
           .and_return(empty_connection)
@@ -78,7 +78,7 @@ describe Executrix::Api do
         delete: [nil,[attachment_data.dup]],
       }.each do |method_name, values|
         describe "##{method_name}" do
-          it 'should delegate to #start_job' do
+          it 'delegates to #start_job' do
             Executrix::Connection
               .should_receive(:connect)
               .and_return(empty_connection)
@@ -88,7 +88,7 @@ describe Executrix::Api do
             s.send(method_name, *values)
           end
 
-          it 'should trigger correct workflow' do
+          it 'triggers correct workflow' do
             Executrix::Connection
               .should_receive(:connect)
               .and_return(empty_connection)

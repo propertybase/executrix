@@ -13,7 +13,7 @@ describe Executrix::Connection do
     query_batch_result_data: 3,
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
-      it 'should delegate correctly to Http class' do
+      it 'delegates correctly to Http class' do
         Executrix::Http
           .should_receive(method_name)
           .and_return({})
@@ -23,7 +23,7 @@ describe Executrix::Connection do
   end
 
   describe '#add_query' do
-    it 'should delegate correctly to Http class' do
+    it 'delegates correctly to Http class' do
       Executrix::Http.should_receive(:add_batch)
           .and_return({})
       subject.add_query(nil, nil)
@@ -31,11 +31,11 @@ describe Executrix::Connection do
   end
 
   describe '#org_id' do
-    it 'should raise exception when not logged in' do
+    it 'raises exception when not logged in' do
       expect {subject.org_id}.to raise_error(RuntimeError)
     end
 
-    it 'should return correct OrgId after login' do
+    it 'returns correct OrgId after login' do
       org_id = '00D50000000IehZ'
       Executrix::Http
       .should_receive(:login)
@@ -46,7 +46,7 @@ describe Executrix::Connection do
 
 
   describe '#add_batch' do
-    it 'should delegate correctly to underlying classes' do
+    it 'delegates correctly to underlying classes' do
       Executrix::Http.should_receive(:add_batch)
           .and_return({})
       Executrix::Helper.should_receive(:records_to_csv)
@@ -54,12 +54,12 @@ describe Executrix::Connection do
       subject.add_batch(nil, [{'non_emtpy' => 'records'}])
     end
 
-    it 'should return -1 for nil input' do
+    it 'returns -1 for nil input' do
       return_code = subject.add_batch(nil, nil)
       expect(return_code).to eq(-1)
     end
 
-    it 'should return -1 for empty input' do
+    it 'returns -1 for empty input' do
       return_code = subject.add_batch(nil, [])
       expect(return_code).to eq(-1)
     end

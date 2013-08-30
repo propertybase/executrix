@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Executrix::Batch do
   describe '#final_status' do
-    it 'should return the final status if it already exists' do
+    it 'returns the final status if it already exists' do
       b = described_class.new nil, nil, nil
       expected_status = {w: :tf}
       b.should_not_receive(:status)
@@ -11,7 +11,7 @@ describe Executrix::Batch do
       expect(b.final_status).to eq(expected_status)
     end
 
-    it 'should return specific final status for -1 batch id' do
+    it 'returns specific final status for -1 batch id' do
       b = described_class.new nil, nil, -1
       expected_status = {
           state: 'Completed',
@@ -21,7 +21,7 @@ describe Executrix::Batch do
       expect(b.final_status).to eq(expected_status)
     end
 
-    it 'should query the status correctly' do
+    it 'queries the status correctly' do
       b = described_class.new nil, nil, nil
       b.should_receive(:status).once.and_return({w: :tf})
       # TODO lookup the actual result
@@ -29,7 +29,7 @@ describe Executrix::Batch do
       expect(b.final_status).to eq({w: :tf, results: {g: :tfo}})
     end
 
-    it 'should yield status correctly' do
+    it 'yields status correctly' do
       expected_running_state = {
           state: 'InProgress'
         }
@@ -45,7 +45,7 @@ describe Executrix::Batch do
         .to yield_successive_args(expected_running_state, expected_final_state)
     end
 
-    it 'should raise exception when batch fails' do
+    it 'raises exception when batch fails' do
       b = described_class.new nil, nil, nil
       expected_error_message = 'Generic Error Message'
       b.should_receive(:status).once.and_return(
