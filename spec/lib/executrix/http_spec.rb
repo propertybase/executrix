@@ -192,7 +192,7 @@ describe Executrix::Http do
     it 'should return hash for creating job' do
       Executrix::Http.should_receive(:process_http_request)
         .and_return(create_job_success)
-      result = Executrix::Http.create_job('a','b','c','d', 'e')
+      result = Executrix::Http.create_job('a','b','c','d', 'e', 'f')
       expect(result).to be_a(Hash)
       expect(result).to have_key(:id)
       expect(result).to have_key(:operation)
