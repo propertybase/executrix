@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Executrix::Helper do
   describe '.records_to_csv' do
-    it 'should return valid csv for single record' do
+    it 'returns valid csv for single record' do
       input = [
         {'Title' => 'Awesome Title', 'Name' => 'A name'},
       ]
@@ -13,7 +13,7 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
 
-    it 'should return valid csv for basic records' do
+    it 'returns valid csv for basic records' do
       input = [
         {'Title' => 'Awesome Title', 'Name' => 'A name'},
         {'Title' => 'A second Title', 'Name' => 'A second name'},
@@ -25,7 +25,7 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
 
-    it 'should return valid csv when first row misses a key' do
+    it 'returns valid csv when first row misses a key' do
       input = [
         {'Title' => 'Awesome Title', 'Name' => 'A name'},
         {'Title' => 'A second Title', 'Name' => 'A second name', 'Something' => 'Else'},
@@ -37,7 +37,7 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
 
-    it 'should correctly convert Array to Multi-Picklist' do
+    it 'correctly converts Array to Multi-Picklist' do
       input = [
         {'Title' => 'Awesome Title', 'Picklist' => ['Several', 'Values']},
         {'Title' => 'A second Title', 'Picklist' => ['SingleValue']},
@@ -49,7 +49,7 @@ describe Executrix::Helper do
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
 
-    it 'should return valid csv when order of keys varies' do
+    it 'returns valid csv when order of keys varies' do
       input = [
         {'Title' => 'Awesome Title', 'Name' => 'A name'},
         {'Name' => 'A second name', 'Title' => 'A second Title'},
@@ -75,17 +75,17 @@ describe Executrix::Helper do
       'https://supercustomname.my.salesforce.com/services/Soap/u/28.0/00EH0000001jNQu'
     }
 
-    it 'should return correct instance for regular salesforce server url' do
+    it 'returns correct instance for regular salesforce server url' do
       expect(described_class.fetch_instance_from_server_url(basic_server_url))
         .to eq('eu1')
     end
 
-    it 'should return correct instance for api salesforce server url' do
+    it 'returns correct instance for api salesforce server url' do
       expect(described_class.fetch_instance_from_server_url(basic_api_server_url))
         .to eq('cs7')
     end
 
-    it 'should return correct instance for named salesforce server url' do
+    it 'returns correct instance for named salesforce server url' do
       expect(described_class.fetch_instance_from_server_url(named_server_url))
         .to eq('supercustomname.my')
     end
@@ -170,7 +170,7 @@ describe Executrix::Helper do
       ]
     end
 
-    it 'should transform values correctly' do
+    it 'transforms values correctly' do
       expect(File).to receive(:absolute_path).and_return('/an/absolute/path')
       expected_output = [
         {
@@ -188,7 +188,7 @@ describe Executrix::Helper do
       expect(input).to eq(expected_output)
     end
 
-    it 'should yield absolute path' do
+    it 'yields absolute path' do
       expect(File).to receive(:absolute_path).and_return('/an/absolute/path')
       input = records_with_attachment
       expect do |blk|
