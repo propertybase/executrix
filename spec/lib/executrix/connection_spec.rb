@@ -14,8 +14,8 @@ describe Executrix::Connection do
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'delegates correctly to Http class' do
-        Executrix::Http
-          .should_receive(method_name)
+        expect(Executrix::Http)
+          .to receive(method_name)
           .and_return({})
         subject.send(method_name, *Array.new(num_of_params))
       end
@@ -24,7 +24,7 @@ describe Executrix::Connection do
 
   describe '#add_query' do
     it 'delegates correctly to Http class' do
-      Executrix::Http.should_receive(:add_batch)
+      expect(Executrix::Http).to receive(:add_batch)
           .and_return({})
       subject.add_query(nil, nil)
     end
@@ -37,8 +37,8 @@ describe Executrix::Connection do
 
     it 'returns correct OrgId after login' do
       org_id = '00D50000000IehZ'
-      Executrix::Http
-      .should_receive(:login)
+      expect(Executrix::Http)
+      .to receive(:login)
       .and_return({session_id: "#{org_id}!AQcAQH0dMHZfz972Szmpkb58urFRkgeBGsxL_QJWwYMfAbUeeG7c1E6LYUfiDUkWe6H34r1AAwOR8B8fLEz6n04NPGRrq0FM"})
       expect(subject.login.org_id).to eq(org_id)
     end
@@ -47,9 +47,9 @@ describe Executrix::Connection do
 
   describe '#add_batch' do
     it 'delegates correctly to underlying classes' do
-      Executrix::Http.should_receive(:add_batch)
+      expect(Executrix::Http).to receive(:add_batch)
           .and_return({})
-      Executrix::Helper.should_receive(:records_to_csv)
+      expect(Executrix::Helper).to receive(:records_to_csv)
         .and_return('My,Awesome,CSV')
       subject.add_batch(nil, [{'non_emtpy' => 'records'}])
     end

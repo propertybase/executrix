@@ -6,7 +6,7 @@ describe Executrix::Batch do
     it 'returns the final status if it already exists' do
       b = described_class.new nil, nil, nil
       expected_status = {w: :tf}
-      b.should_not_receive(:status)
+      expect(b).not_to receive(:status)
       b.instance_variable_set '@final_status', expected_status
       expect(b.final_status).to eq(expected_status)
     end
@@ -17,15 +17,15 @@ describe Executrix::Batch do
           state: 'Completed',
           state_message: 'Empty Request',
         }
-      b.should_not_receive(:status)
+      expect(b).not_to receive(:status)
       expect(b.final_status).to eq(expected_status)
     end
 
     it 'queries the status correctly' do
       b = described_class.new nil, nil, nil
-      b.should_receive(:status).once.and_return({w: :tf})
+      expect(b).to receive(:status).once.and_return({w: :tf})
       # TODO lookup the actual result
-      b.should_receive(:results).once.and_return({g: :tfo})
+      expect(b).to receive(:results).once.and_return({g: :tfo})
       expect(b.final_status).to eq({w: :tf, results: {g: :tfo}})
     end
 
@@ -37,10 +37,10 @@ describe Executrix::Batch do
           state: 'Completed'
         }
       b = described_class.new nil, nil, nil
-      b.should_receive(:status).once.and_return(expected_running_state)
-      b.should_receive(:status).once.and_return(expected_running_state)
-      b.should_receive(:status).once.and_return(expected_final_state)
-      b.should_receive(:results).once.and_return({g: :tfo})
+      expect(b).to receive(:status).once.and_return(expected_running_state)
+      expect(b).to receive(:status).once.and_return(expected_running_state)
+      expect(b).to receive(:status).once.and_return(expected_final_state)
+      expect(b).to receive(:results).once.and_return({g: :tfo})
       expect{|blk| b.final_status(0, &blk)}
         .to yield_successive_args(expected_running_state, expected_final_state)
     end
@@ -48,7 +48,7 @@ describe Executrix::Batch do
     it 'raises exception when batch fails' do
       b = described_class.new nil, nil, nil
       expected_error_message = 'Generic Error Message'
-      b.should_receive(:status).once.and_return(
+      expect(b).to receive(:status).once.and_return(
         {
           state: 'Failed',
           state_message: expected_error_message})

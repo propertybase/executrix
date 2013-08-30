@@ -141,7 +141,7 @@ describe Executrix::Http do
     end
 
     it 'raises an error for faulty login' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(login_error)
       expect{ Executrix::Http.login('a','b','c', 'd') }
         .to raise_error(RuntimeError, login_error_message)
@@ -149,7 +149,7 @@ describe Executrix::Http do
 
     it 'returns hash for correct login' do
       [login_success, login_success_new].each do |login_response|
-        Executrix::Http.should_receive(:process_http_request)
+        expect(Executrix::Http).to receive(:process_http_request)
           .and_return(login_response)
         result = Executrix::Http.login('a','b','c', 'd')
         expect(result).to be_a(Hash)
@@ -190,7 +190,7 @@ describe Executrix::Http do
     end
 
     it 'returns hash for creating job' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(create_job_success)
       result = Executrix::Http.create_job('a','b','c','d', 'e', 'f')
       expect(result).to be_a(Hash)
@@ -219,7 +219,7 @@ describe Executrix::Http do
     end
 
     it 'returns hash for adding batch' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(add_batch_success)
       result = Executrix::Http.add_batch(:post,'a','b','c','d')
       expect(result).to be_a(Hash)
@@ -259,7 +259,7 @@ describe Executrix::Http do
     end
 
     it 'returns hash for closing job' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(close_job_success)
       result = Executrix::Http.close_job('a','b','c','d')
       expect(result).to be_a(Hash)
@@ -281,7 +281,7 @@ describe Executrix::Http do
     end
 
     it 'raises an exception on faulty authorization' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(invalid_session_id)
       expect{Executrix::Http.query_batch('a','b','c','d','e')}
         .to raise_error(RuntimeError, 'InvalidSessionId: Invalid session id')
@@ -296,7 +296,7 @@ describe Executrix::Http do
     end
 
     it 'returns hash including the result id' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(batch_result_success)
       result = Executrix::Http.query_batch_result_id('a','b','c','d','e')
       expect(result).to be_a(Hash)
@@ -318,7 +318,7 @@ describe Executrix::Http do
     end
 
     it 'returns array of arrays for data' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(batch_result_data_success)
       result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
       expect(result).to eq([
@@ -327,7 +327,7 @@ describe Executrix::Http do
     end
 
     it 'returns correct array with spaces' do
-      Executrix::Http.should_receive(:process_http_request)
+      expect(Executrix::Http).to receive(:process_http_request)
         .and_return(batch_result_data_with_spaces_success)
       result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
       expect(result).to eq([
