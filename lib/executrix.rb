@@ -62,7 +62,8 @@ module Executrix
         zip_filename = "#{Dir.tmpdir}/#{tmp_filename}"
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
           Executrix::Helper.transform_values!(records, attachment_keys) do |path|
-            zipfile.add(Executrix::Helper.absolute_to_relative_path(path, ''), path)
+            relative_path = Executrix::Helper.absolute_to_relative_path(path, '')
+            zipfile.add(relative_path, path) rescue Zip::ZipEntryExistsError
           end
           tmp_filename = Dir::Tmpname.make_tmpname('request', '.txt')
           request_filename = "#{Dir.tmpdir}/#{tmp_filename}"
