@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.homepage    = 'https://github.com/propertybase/executrix'
   gem.summary     = %q{Ruby support for the Salesforce Bulk API}
   gem.description = %q{This gem provides a super simple interface for the Salesforce Bulk API. It provides support for insert, update, upsert, delete, and query.}
+  gem.license     = 'MIT'
 
   gem.rubyforge_project = 'executrix'
 
