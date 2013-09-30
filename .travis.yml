@@ -6,10 +6,11 @@ rvm:
   - 2.0.0
   - jruby-19mode
   - rbx-19mode
+  - rbx-20mode
+  - 2.1.0-preview1
 matrix:
   allow_failures:
     - rvm:
-      - rbx-19mode
-      - 2.1.0
+      - 2.1.0-preview1
 script:
   - rake spec
