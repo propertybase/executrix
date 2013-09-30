@@ -7,10 +7,12 @@ rvm:
   - jruby-19mode
   - rbx-19mode
   - rbx-20mode
+  - ruby-head
   - 2.1.0-preview1
 matrix:
   allow_failures:
     - rvm:
       - 2.1.0-preview1
+      - ruby-head
 script:
   - rake spec
