@@ -8,6 +8,8 @@ rvm:
   - rbx-19mode
 matrix:
   allow_failures:
-    - rvm: rbx-19mode
+    - rvm:
+      - rbx-19mode
+      - 2.1.0
 script:
   - rake spec
