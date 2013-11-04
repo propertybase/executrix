@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'nokogiri', '< 1.7'
   gem.add_dependency 'rubyzip', '< 1.2'
   gem.add_development_dependency 'rspec', '< 2.15'
-  gem.add_development_dependency 'webmock', '< 1.14'
+  gem.add_development_dependency 'webmock', '< 1.18'
   if RUBY_ENGINE == 'rbx'
     gem.add_dependency 'rubysl', '< 2.1'
     gem.add_development_dependency 'racc', '< 1.5'
