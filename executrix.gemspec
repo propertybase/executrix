@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json'
   gem.add_dependency 'nori', '< 2.4'
   gem.add_dependency 'nokogiri', '< 1.7'
-  gem.add_dependency 'rubyzip', '< 1.2'
+  gem.add_dependency 'rubyzip', '>= 1.0' ,'< 1.2'
   gem.add_development_dependency 'rspec', '< 2.15'
   gem.add_development_dependency 'webmock', '< 1.18'
   if RUBY_ENGINE == 'rbx'
