@@ -41,8 +41,7 @@ module Executrix
       process_csv_response(process_http_request(r))
     end
 
-    def add_file_upload_batch instance, session_id, job_id, filename, api_version
-      data = File.read(filename)
+    def add_file_upload_batch instance, session_id, job_id, data, api_version
       headers = {
         'Content-Type' => 'zip/csv',
         'X-SFDC-Session' => session_id}

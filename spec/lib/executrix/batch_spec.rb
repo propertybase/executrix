@@ -56,4 +56,16 @@ describe Executrix::Batch do
         .to raise_error(StandardError, expected_error_message)
     end
   end
+
+  describe '#raw_request' do
+    let(:connection) { double('Executrix::Connection') }
+    let(:raw_request) { 'This can be a CSV' }
+
+    it 'sends correct messages to connect' do
+      b = described_class.new nil, nil, nil
+      b.instance_variable_set '@connection', connection
+      expect(connection).to receive(:raw_request).and_return(raw_request)
+      expect(b.raw_request).to eq(raw_request)
+    end
+  end
 end
