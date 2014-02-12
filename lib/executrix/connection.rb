@@ -1,6 +1,7 @@
 module Executrix
   class Connection
     attr_reader :raw_request
+    attr_reader :raw_result
 
     def initialize(username, password, api_version, sandbox)
       @username = username
@@ -75,7 +76,7 @@ module Executrix
     end
 
     def query_batch_result_data job_id, batch_id, result_id
-      Executrix::Http.query_batch_result_data(
+      @raw_result = Executrix::Http.query_batch_result_data(
         @instance,
         @session_id,
         job_id,
@@ -83,6 +84,7 @@ module Executrix
         result_id,
         @api_version,
       )
+      Executrix::Helper.parse_csv @raw_result
     end
 
     def add_file_upload_batch job_id, filename

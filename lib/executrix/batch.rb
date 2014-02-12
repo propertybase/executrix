@@ -45,6 +45,10 @@ module Executrix
       @connection.raw_request
     end
 
+    def raw_result
+      @connection.raw_result
+    end
+
     private
     def init_result_id
       result_raw = @connection.query_batch_result_id(@job_id, @batch_id)

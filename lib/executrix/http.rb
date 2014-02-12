@@ -38,7 +38,7 @@ module Executrix
 
     def query_batch_result_data *args
       r = Http::Request.query_batch_result_data(*args)
-      process_csv_response(process_http_request(r))
+      normalize_csv(process_http_request(r))
     end
 
     def add_file_upload_batch instance, session_id, job_id, data, api_version
@@ -81,8 +81,8 @@ module Executrix
       res.values.first
     end
 
-    def process_csv_response res
-      CSV.parse(res.gsub(/\n\s+/, "\n"), headers: true).map{|r| r.to_hash}
+    def normalize_csv res
+      res.gsub(/\n\s+/, "\n")
     end
 
     def process_soap_response res
