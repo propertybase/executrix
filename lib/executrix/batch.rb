@@ -1,5 +1,7 @@
 module Executrix
   class Batch
+    attr_reader :job_id
+
     def initialize connection, job_id, batch_id
       @connection = connection
       @job_id = job_id
