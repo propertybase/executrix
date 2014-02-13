@@ -65,5 +65,9 @@ module Executrix
     def absolute_to_relative_path input, replacement
       input.gsub(/(^C:[\/\\])|(^\/)/,replacement)
     end
+
+    def parse_csv csv_string
+      CSV.parse(csv_string, headers: true).map{|r| r.to_hash}
+    end
   end
 end

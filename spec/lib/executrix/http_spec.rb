@@ -317,22 +317,18 @@ describe Executrix::Http do
         "003K001200KO82cIAD","King of the  Hill"}
     end
 
-    it 'returns array of arrays for data' do
+    it 'returns a correctly formatted CSV string' do
       expect(Executrix::Http).to receive(:process_http_request)
         .and_return(batch_result_data_success)
       result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
-      expect(result).to eq([
-        {'Id' => '003M000057GH39aIAD', 'my_external_id__c' => 'K-00J799'},
-        {'Id' => '003M001200KO82cIAD', 'my_external_id__c' => 'K-015699'}])
+      expect(result).to eq(batch_result_data_success.gsub(/^\s+/, ''))
     end
 
-    it 'returns correct array with spaces' do
+    it 'returns a correctly formatted CSV string including spaces' do
       expect(Executrix::Http).to receive(:process_http_request)
         .and_return(batch_result_data_with_spaces_success)
       result = Executrix::Http.query_batch_result_data('a','b','c','d','e','f')
-      expect(result).to eq([
-        {'Id' => '003K000057GH39aIAD', 'Name' => 'Master of Disaster'},
-        {'Id' => '003K001200KO82cIAD', 'Name' => 'King of the  Hill'}])
+      expect(result).to eq(batch_result_data_with_spaces_success.gsub(/^\s+/, ''))
     end
   end
 end

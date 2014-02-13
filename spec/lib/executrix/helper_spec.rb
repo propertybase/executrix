@@ -217,4 +217,21 @@ describe Executrix::Helper do
         to eq('a/forwardslash/path')
     end
   end
+
+  describe '.parse_csv' do
+    let(:csv_string) {
+       "Id,my_external_id__c\n" \
+       "003M000057GH39aIAD,K-00J799\n" \
+       "003M001200KO82cIAD,K-015699"
+    }
+    let(:expected_result) {
+      [
+        { 'Id' => '003M000057GH39aIAD', 'my_external_id__c' => 'K-00J799' },
+        { 'Id' => '003M001200KO82cIAD', 'my_external_id__c' => 'K-015699' },
+      ]
+    }
+    it 'correctly transforms csv string' do
+      expect(described_class.parse_csv(csv_string)).to eq(expected_result)
+    end
+  end
 end

@@ -56,4 +56,18 @@ describe Executrix::Batch do
         .to raise_error(StandardError, expected_error_message)
     end
   end
+
+  [:request, :result].each do |action|
+    let(:connection) { double('Executrix::Connection') }
+    let(:request_result) { 'Generic Result/Request' }
+    describe "#raw_#{action}" do
+
+      it 'sends correct messages to connection' do
+        b = described_class.new nil, nil, nil
+        b.instance_variable_set '@connection', connection
+        expect(connection).to receive(:"raw_#{action}").and_return(request_result)
+        expect(b.send(:"raw_#{action}")).to eq(request_result)
+      end
+    end
+  end
 end
