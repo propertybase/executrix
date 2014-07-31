@@ -65,4 +65,31 @@ describe Executrix::Connection do
       expect(return_code).to eq(-1)
     end
   end
+
+  describe '#query_batch_result_id' do
+    let(:job_id) {"12345"}
+    let(:batch_id) {"67890"}
+
+    context 'with a single page of results' do
+      let(:single_result) {{:result=>"M75200000001Vgt", :@xmlns=>"http://www.force.com/2009/06/asyncapi/dataload"}}
+      it 'returns the result_id as a string' do
+        Executrix::Http.should_receive(:query_batch_result_id).
+          with(nil, nil, job_id, batch_id, nil).
+          and_return(single_result)
+
+        subject.query_batch_result_id("12345", "67890").should == single_result
+      end
+    end
+
+    context 'with an array of page of results' do
+      let(:multiple_result) {{:result=>["752M00000001Vgt", "752M00000001Vgy"], :@xmlns=>"http://www.force.com/2009/06/asyncapi/dataload"}}
+      it 'returns the resu lt_id as a string' do
+        Executrix::Http.should_receive(:query_batch_result_id).
+          with(nil, nil, job_id, batch_id, nil).
+          and_return(multiple_result)
+
+        subject.query_batch_result_id("12345", "67890").should == multiple_result
+      end
+    end
+  end
 end

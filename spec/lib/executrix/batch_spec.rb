@@ -70,4 +70,59 @@ describe Executrix::Batch do
       end
     end
   end
-end
+
+  describe '#results' do
+    let(:job_id) {"12345"}
+    let(:batch_id) {"67890"}
+    let(:connection) {stub("connection")}
+    subject {described_class.new connection, job_id, batch_id}
+
+    context 'with a single page of results' do
+      let(:result_id) {"M75200000001Vgt"}
+      let(:single_result) {{:Id=>"M75200000001Vgt", :name=>"Joe"}}
+
+      it 'returns the results' do
+        connection.should_receive(:query_batch_result_id).
+          with(job_id, batch_id).
+          and_return({:result => result_id})
+
+        connection.should_receive(:query_batch_result_data).
+          once.
+          with(job_id, batch_id, result_id).
+          and_return(single_result)
+
+        subject.results.should == [single_result]
+      end
+    end
+
+    context 'with an array of page of results' do
+      let(:result_ids) {["M75200000001Vgt", "M76500000001Vgt", "M73400000001Vgt"]}
+      let(:multiple_results) {[{:Id=>"AAA11123", :name=>"Joe"},
+        {:Id=>"AAA11124", :name=>"Sam"},
+        {:Id=>"AAA11125", :name=>"Mike"}]}
+
+      it 'returns concatenated results' do
+        connection.should_receive(:query_batch_result_id).
+          with(job_id, batch_id).
+          and_return({:result => result_ids})
+
+        connection.should_receive(:query_batch_result_data).
+          ordered.
+          with(job_id, batch_id, result_ids[0]).
+          and_return(multiple_results[0])
+
+        connection.should_receive(:query_batch_result_data).
+          ordered.
+          with(job_id, batch_id, result_ids[1]).
+          and_return(multiple_results[1])
+
+        connection.should_receive(:query_batch_result_data).
+          ordered.
+          with(job_id, batch_id, result_ids[2]).
+          and_return(multiple_results[2])
+
+        subject.results.should == multiple_results
+      end
+    end
+  end
+end 

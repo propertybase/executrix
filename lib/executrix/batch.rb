@@ -36,9 +36,15 @@ module Executrix
       @connection.query_batch @job_id, @batch_id
     end
 
+    # results returned from Salesforce can be a single page id, or an array of ids.
+    # if it's an array of ids, we will fetch the results from each, and concatenate them.
     def results
-      init_result_id
-      @connection.query_batch_result_data(@job_id, @batch_id, @result_id)
+      result_ids = query_result_id
+      result_ids = Array(result_ids) unless result_ids.respond_to?(:each)
+
+      result_ids.map do |result_id|
+        @connection.query_batch_result_data(@job_id, @batch_id, result_id)
+      end.flatten
     end
 
     def raw_request
@@ -50,11 +56,9 @@ module Executrix
     end
 
     private
-    def init_result_id
+    def query_result_id
       result_raw = @connection.query_batch_result_id(@job_id, @batch_id)
-      if result_raw
-        @result_id = result_raw[:result]
-      end
+      result_raw[:result] if result_raw
     end
   end
 end
