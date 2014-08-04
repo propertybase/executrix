@@ -14,6 +14,7 @@ describe Executrix::Connection do
   }.each do |method_name, num_of_params|
     describe "##{method_name}" do
       it 'delegates correctly to Http class' do
+        allow(Executrix::Helper).to receive(:parse_csv).and_return([])
         expect(Executrix::Http)
           .to receive(method_name)
           .and_return({})

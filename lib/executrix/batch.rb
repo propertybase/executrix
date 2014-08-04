@@ -1,5 +1,7 @@
 module Executrix
   class Batch
+    attr_reader :job_id
+
     def initialize connection, job_id, batch_id
       @connection = connection
       @job_id = job_id
@@ -37,6 +39,14 @@ module Executrix
     def results
       init_result_id
       @connection.query_batch_result_data(@job_id, @batch_id, @result_id)
+    end
+
+    def raw_request
+      @connection.raw_request
+    end
+
+    def raw_result
+      @connection.raw_result
     end
 
     private
