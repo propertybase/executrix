@@ -82,16 +82,16 @@ describe Executrix::Batch do
       let(:single_result) {{:Id=>"M75200000001Vgt", :name=>"Joe"}}
 
       it 'returns the results' do
-        connection.should_receive(:query_batch_result_id).
+        expect(connection).to receive(:query_batch_result_id).
           with(job_id, batch_id).
           and_return({:result => result_id})
 
-        connection.should_receive(:query_batch_result_data).
+        expect(connection).to receive(:query_batch_result_data).
           once.
           with(job_id, batch_id, result_id).
           and_return(single_result)
 
-        subject.results.should == [single_result]
+        expect(subject.results).to eq([single_result])
       end
     end
 
@@ -102,26 +102,26 @@ describe Executrix::Batch do
         {:Id=>"AAA11125", :name=>"Mike"}]}
 
       it 'returns concatenated results' do
-        connection.should_receive(:query_batch_result_id).
+        expect(connection).to receive(:query_batch_result_id).
           with(job_id, batch_id).
           and_return({:result => result_ids})
 
-        connection.should_receive(:query_batch_result_data).
+        expect(connection).to receive(:query_batch_result_data).
           ordered.
           with(job_id, batch_id, result_ids[0]).
           and_return(multiple_results[0])
 
-        connection.should_receive(:query_batch_result_data).
+        expect(connection).to receive(:query_batch_result_data).
           ordered.
           with(job_id, batch_id, result_ids[1]).
           and_return(multiple_results[1])
 
-        connection.should_receive(:query_batch_result_data).
+        expect(connection).to receive(:query_batch_result_data).
           ordered.
           with(job_id, batch_id, result_ids[2]).
           and_return(multiple_results[2])
 
-        subject.results.should == multiple_results
+        expect(subject.results).to eq(multiple_results)
       end
     end
   end

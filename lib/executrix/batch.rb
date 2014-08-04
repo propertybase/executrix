@@ -39,10 +39,7 @@ module Executrix
     # results returned from Salesforce can be a single page id, or an array of ids.
     # if it's an array of ids, we will fetch the results from each, and concatenate them.
     def results
-      result_ids = query_result_id
-      result_ids = Array(result_ids) unless result_ids.respond_to?(:each)
-
-      result_ids.map do |result_id|
+      Array(query_result_id).map do |result_id|
         @connection.query_batch_result_data(@job_id, @batch_id, result_id)
       end.flatten
     end
