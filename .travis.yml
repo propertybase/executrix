@@ -11,8 +11,8 @@ rvm:
   - jruby-head
 matrix:
   allow_failures:
-    - rvm:
-      - ruby-head
-      - jruby-head
+    - rvm: ruby-head
+    - rvm: jruby-head
+  fast_finish: true
 script:
   - bundle exec rake spec
