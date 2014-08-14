@@ -3,6 +3,7 @@ require 'executrix/helper'
 require 'executrix/batch'
 require 'executrix/http'
 require 'executrix/connection'
+require 'executrix/results_page'
 require 'zip'
 
 module Executrix

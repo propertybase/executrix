@@ -66,8 +66,37 @@ module Executrix
       input.gsub(/(^C:[\/\\])|(^\/)/,replacement)
     end
 
+    def normalize_csv res
+      res.gsub(/\n\s+/, "\n")
+    end
+
+    def split_csv_line line
+      # replace empty columns with a temp value.  Do it twice
+      line.gsub!(/,\"\",/, ",\"\x05\",")
+      line.gsub!(/,\"\",/, ",\"\x05\",")
+      # catch them at the end of the line!
+      line.gsub!(/,\"\"\n/, ",\"\x05\"\n")
+      # replace ludicrous triple quotes with single
+      line.gsub!(/\"\"\"/, "\"")
+      # replace double quotes (not indicating empty column) with a temp value
+      line.gsub!("\"\"", "\x06")
+      line.chomp!("\"\n")
+      line.sub!("\"", "") #first occurence at beginning of string.
+
+      line.split("\",\"").map do |col|
+        col.gsub!(/\x05/, "")
+        col.gsub!(/\x06/, "\"")
+        col
+      end
+    end
+
     def parse_csv csv_string
       CSV.parse(csv_string, headers: true).map{|r| r.to_hash}
+    end
+
+    # Salesforce gives us is comma-delimited text, not strictly CSV format.  
+    def csv_to_hash line, headers
+      Hash[headers.zip(split_csv_line(line))]
     end
   end
 end

@@ -21,12 +21,10 @@ describe Executrix::Batch do
       expect(b.final_status).to eq(expected_status)
     end
 
-    it 'queries the status correctly' do
+    it 'returns itself once it has finished' do
       b = described_class.new nil, nil, nil
       expect(b).to receive(:status).once.and_return({w: :tf})
-      # TODO lookup the actual result
-      expect(b).to receive(:results).once.and_return({g: :tfo})
-      expect(b.final_status).to eq({w: :tf, results: {g: :tfo}})
+      expect(b.final_status).to eq(b)
     end
 
     it 'yields status correctly' do
@@ -40,7 +38,6 @@ describe Executrix::Batch do
       expect(b).to receive(:status).once.and_return(expected_running_state)
       expect(b).to receive(:status).once.and_return(expected_running_state)
       expect(b).to receive(:status).once.and_return(expected_final_state)
-      expect(b).to receive(:results).once.and_return({g: :tfo})
       expect{|blk| b.final_status(0, &blk)}
         .to yield_successive_args(expected_running_state, expected_final_state)
     end
@@ -57,17 +54,15 @@ describe Executrix::Batch do
     end
   end
 
-  [:request, :result].each do |action|
-    let(:connection) { double('Executrix::Connection') }
-    let(:request_result) { 'Generic Result/Request' }
-    describe "#raw_#{action}" do
+  let(:connection) { double('Executrix::Connection') }
+  let(:request_result) { 'Generic Request' }
+  describe "#raw_request" do
 
-      it 'sends correct messages to connection' do
-        b = described_class.new nil, nil, nil
-        b.instance_variable_set '@connection', connection
-        expect(connection).to receive(:"raw_#{action}").and_return(request_result)
-        expect(b.send(:"raw_#{action}")).to eq(request_result)
-      end
+    it 'sends correct messages to connection' do
+      b = described_class.new nil, nil, nil
+      b.instance_variable_set '@connection', connection
+      expect(connection).to receive(:"raw_request").and_return(request_result)
+      expect(b.send(:"raw_request")).to eq(request_result)
     end
   end
 
@@ -79,9 +74,18 @@ describe Executrix::Batch do
 
     context 'with a single page of results' do
       let(:result_id) {"M75200000001Vgt"}
-      let(:single_result) {{:Id=>"M75200000001Vgt", :name=>"Joe"}}
+      let(:results) {
+        StringIO.new(
+          "\"Title\",\"Name\"\n\"Awesome Title\",\"A name\"\n"
+          )
+      }
+      let!(:results_page) {
+        ResultsPage.new(results)
+      }
 
-      it 'returns the results' do
+      it 'yields the results page' do
+        expect(ResultsPage).to receive(:new).with(results).
+          and_return results_page
         expect(connection).to receive(:query_batch_result_id).
           with(job_id, batch_id).
           and_return({:result => result_id})
@@ -89,17 +93,31 @@ describe Executrix::Batch do
         expect(connection).to receive(:query_batch_result_data).
           once.
           with(job_id, batch_id, result_id).
-          and_return(single_result)
+          and_return(results)
 
-        expect(subject.results).to eq([single_result])
+        expect{|blk| subject.results(&blk)}.
+          to yield_with_args(results_page)
       end
     end
 
-    context 'with an array of page of results' do
-      let(:result_ids) {["M75200000001Vgt", "M76500000001Vgt", "M73400000001Vgt"]}
-      let(:multiple_results) {[{:Id=>"AAA11123", :name=>"Joe"},
-        {:Id=>"AAA11124", :name=>"Sam"},
-        {:Id=>"AAA11125", :name=>"Mike"}]}
+    context 'with several pages of results' do
+      let(:result_ids) {["M75200000001Vgt", "M76500000001Vgt"]}
+      let(:results_1) {
+        StringIO.new("\"Title\",\"Name\"\n\"Awesome Title\",\"A name\"\n")
+      }
+      let(:results_2) {
+        StringIO.new(
+          "\"Title\",\"Name\"\n" \
+          "\"Prettygood Title\",\"B name\"\n" \
+          "\"Notsogreat Title\",\"c name\"\n"
+        )
+      }
+      let!(:results_page1) {
+        ResultsPage.new(results_1)
+      }
+      let!(:results_page2) {
+        ResultsPage.new(results_2)
+      }
 
       it 'returns concatenated results' do
         expect(connection).to receive(:query_batch_result_id).
@@ -109,19 +127,19 @@ describe Executrix::Batch do
         expect(connection).to receive(:query_batch_result_data).
           ordered.
           with(job_id, batch_id, result_ids[0]).
-          and_return(multiple_results[0])
+          and_return(results_1)
 
         expect(connection).to receive(:query_batch_result_data).
           ordered.
           with(job_id, batch_id, result_ids[1]).
-          and_return(multiple_results[1])
+          and_return(results_2)
+        expect(ResultsPage).to receive(:new).with(results_1).
+          and_return results_page1
+        expect(ResultsPage).to receive(:new).with(results_2).
+          and_return results_page2
 
-        expect(connection).to receive(:query_batch_result_data).
-          ordered.
-          with(job_id, batch_id, result_ids[2]).
-          and_return(multiple_results[2])
-
-        expect(subject.results).to eq(multiple_results)
+        expect{|blk| subject.results(&blk)}.
+          to yield_successive_args(results_page1, results_page2)
       end
     end
   end

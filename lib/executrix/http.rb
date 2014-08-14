@@ -36,9 +36,10 @@ module Executrix
       process_xml_response(nori.parse(process_http_request(r)))
     end
 
+    # Returns an IO containing the response body.
     def query_batch_result_data *args
       r = Http::Request.query_batch_result_data(*args)
-      normalize_csv(process_http_request(r))
+      stream_http_request r
     end
 
     def add_file_upload_batch instance, session_id, job_id, data, api_version
@@ -65,6 +66,23 @@ module Executrix
       http.request(http_request).body
     end
 
+    def stream_http_request(r)
+      io = StringIO.new
+      http = Net::HTTP.new(r.host, 443)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http_request = Net::HTTP.
+      const_get(r.http_method.capitalize).
+        new(r.path, r.headers)
+      http_request.body = r.body if r.body
+      http.request http_request do |response|
+        response.read_body do |chunk|
+          io << chunk
+        end
+      end
+      io
+    end
+
     private
     def nori
       Nori.new(
@@ -79,10 +97,6 @@ module Executrix
       end
 
       res.values.first
-    end
-
-    def normalize_csv res
-      res.gsub(/\n\s+/, "\n")
     end
 
     def process_soap_response res
