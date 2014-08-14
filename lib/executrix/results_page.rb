@@ -3,6 +3,7 @@ class ResultsPage
 
   def initialize(io)
     @io = io
+    @io.rewind
     @header = Executrix::Helper.split_csv_line(@io.readline("\"\n"))
   end
 

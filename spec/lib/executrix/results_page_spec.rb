@@ -29,6 +29,14 @@ describe ResultsPage do
       expect{|blk| page.each_slice(2, &blk)}.
         to yield_successive_args(result_hashes[0..1], [result_hashes[2]])
     end
+
+    it 'rewinds StringIO for reading' do
+      io = StringIO.new()
+      io << result_text.string
+      page = ResultsPage.new(io)
+      expect{|blk| page.each(&blk)}.
+        to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2])
+    end
   end
 
 end
