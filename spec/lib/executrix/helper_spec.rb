@@ -245,9 +245,7 @@ describe Executrix::Helper do
     let(:line3) {
       "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"Jeremiah Jay\",\"\",\"0023643254AEF\",\"0027654454AEF\",\"[{\"\"Json_key\"\":\"\"Json_value\"\"}]\"\n"
     }
-    let(:line4) {
-      "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"Jeremiah \"\"Jay\"\"\n Thanks \",\"\",\"0023643254AEF\",\"0027654454AEF\",\"\"\n"
-    }
+    
 
     let(:array) {
       ["0023666454AEF", "2014-06-24T15:35:27.000Z", "Jeremiah Jay","", "0023643254AEF", "0027654454AEF",""]
@@ -270,10 +268,5 @@ describe Executrix::Helper do
     it "preserves double quotes in Json content" do
       expect(Executrix::Helper.split_csv_line(line3)).to eq(array_with_json)
     end
-
-    it "correctly manages newlines even around double escaped quotes" do
-      expect(Executrix::Helper.split_csv_line(line4)).to eq(array_with_multiline)
-    end
-
   end
 end

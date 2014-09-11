@@ -9,6 +9,7 @@ class ResultsPage
 
   def each
     @io.lines("\"\n").each do |line|
+
       if @previous_line
         line.insert(0, @previous_line)
         @previous_line = nil
@@ -17,7 +18,8 @@ class ResultsPage
       if Executrix::Helper.valid_line_ending?(line)
         yield Executrix::Helper.csv_to_hash line, @header
       else
-        @line = Executrix::Helper.escape_line_ending(line)
+        @previous_line = Executrix::Helper.escape_line_ending(line)
+        next
       end
     end
   end

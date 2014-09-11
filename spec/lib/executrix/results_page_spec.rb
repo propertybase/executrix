@@ -37,6 +37,23 @@ describe ResultsPage do
       expect{|blk| page.each(&blk)}.
         to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2])
     end
+
+    it 'can combine lines when first line has an escaped line ending' do
+      io = StringIO.new(
+        "\"Id\",\"Date\",\"Message\",\"ApprovedBy\",\"Id2\",\"Id3\"\n" \
+        "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"Jeremiah \"\"Jay\"\"\n Thanks \",\"\",\"0023643254AEF\",\"0027654454AEF\",\"\n"
+      )
+
+      hash_with_multiline = 
+        {"Id"=>"0023666454AEF", "Date"=>"2014-06-24T15:35:27.000Z", "Message"=>"Jeremiah \"Jay\"\n Thanks ", "ApprovedBy"=>"", "Id2"=>"0023643254AEF", "Id3"=>"0027654454AEF\","}
+      page = ResultsPage.new(io)
+
+      expect{|blk| page.each(&blk)}.
+        to yield_with_args(hash_with_multiline)
+
+    end
+
+
   end
 
 end
