@@ -90,6 +90,18 @@ module Executrix
       end
     end
 
+    # determines if a line is actually complete, or if it has false line ending caused by bad CSV format from SF
+    # complete lines end with \n, preceeded by an odd number of \" characters (usually 1, sometimes more)
+    def valid_line_ending?(string)
+      ending = string.chomp("\n").reverse.match(/(\"){1,}/)[0]
+      string.end_with?(ending + "\n") && ending.count("\"").odd?
+    end
+
+    #just add an extra temp character to prevent line splitting.
+    def escape_line_ending(string)
+      string.gsub!("\"\n", "\"\x05\n")
+    end
+
     def parse_csv csv_string
       CSV.parse(csv_string, headers: true).map{|r| r.to_hash}
     end
