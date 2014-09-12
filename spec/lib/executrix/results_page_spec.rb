@@ -7,27 +7,29 @@ describe ResultsPage do
         "\"Title\",\"Name\"\n" \
         "\"Prettygood Title\",\"B name\"\n" \
         "\"Notsogreat Title\",\"c name\"\n" \
-        "\"RLYbad Title\",\"F name\"\n"
+        "\"RLYbad Title\",\"F name\"\n" \
+        "\"Most Best Title\",\"\"\n"
         )
     }
     let(:result_hashes) {
       [
         {"Title" => "Prettygood Title", "Name" => "B name"},
         {"Title" => "Notsogreat Title", "Name" => "c name"},
-        {"Title" => "RLYbad Title", "Name" => "F name"}
+        {"Title" => "RLYbad Title", "Name" => "F name"},
+        {"Title" => "Most Best Title", "Name" => ""}
       ]
     }
 
     it 'enumerates lines in a result and returns a hash' do
       page = ResultsPage.new(result_text)
       expect{|blk| page.each(&blk)}.
-        to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2])
+        to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2], result_hashes[3])
     end
 
     it 'enumerates lines in chunks/slices if requested' do
       page = ResultsPage.new(result_text)
       expect{|blk| page.each_slice(2, &blk)}.
-        to yield_successive_args(result_hashes[0..1], [result_hashes[2]])
+        to yield_successive_args(result_hashes[0..1], result_hashes[2..3])
     end
 
     it 'rewinds StringIO for reading' do
@@ -35,7 +37,7 @@ describe ResultsPage do
       io << result_text.string
       page = ResultsPage.new(io)
       expect{|blk| page.each(&blk)}.
-        to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2])
+        to yield_successive_args(result_hashes[0], result_hashes[1], result_hashes[2], result_hashes[3])
     end
 
     it 'can combine lines when first line has an escaped line ending' do

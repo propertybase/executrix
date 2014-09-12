@@ -91,10 +91,18 @@ module Executrix
     end
 
     # determines if a line is actually complete, or if it has false line ending caused by bad CSV format from SF
-    # complete lines end with \n, preceeded by an odd number of \" characters (usually 1, sometimes more)
+    # complete lines end with 1 of the following
+    # 1: "\"\n" in the typical case
+    # 2: ",\"\"\n" when the value for the last column of the line is empty.
+    # 3: "\n" preceded by an ODD number of "\"", and no comma.  An even number usually indicates escaped strings in the actual text value.
+    #valid line endings are either ()
     def valid_line_ending?(string)
-      ending = string.chomp("\n").reverse.match(/(\"){1,}/)[0]
-      string.end_with?(ending + "\n") && ending.count("\"").odd?
+      #match optional /,/ followed by 1 or more /\"/, followed by /\n/
+
+      ending = string.match(/(\,)?(\"){1,}\n/)[0]
+      return false unless string.end_with?(ending)
+      
+      ending.count("\"").odd? || ending.count(",") == 1
     end
 
     #just add an extra temp character to prevent line splitting.
