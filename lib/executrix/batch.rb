@@ -25,7 +25,7 @@ module Executrix
         yield @final_status if block_given?
       end
 
-      raise @final_status[:state_message] if @final_status[:state] == 'Failed'
+      raise Executrix::BatchError.new(@final_status[:state_message]) if @final_status[:state] == 'Failed'
 
       self
     end

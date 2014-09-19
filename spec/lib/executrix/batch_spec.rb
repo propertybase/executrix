@@ -50,7 +50,7 @@ describe Executrix::Batch do
           state: 'Failed',
           state_message: expected_error_message})
       expect{b.final_status}
-        .to raise_error(StandardError, expected_error_message)
+        .to raise_error(Executrix::BatchError, expected_error_message)
     end
   end
 
