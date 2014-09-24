@@ -18,7 +18,11 @@ module Executrix
       records.each do |hash|
         row = CSV::Row.new([],[],false)
         to_store = hash.inject({}) do |h, (k, v)|
-          h[k] = v.class == Array ? v.join(';') : v
+          if v == nil || v == '' || v == []
+            h[k] = '#N/A'
+          else
+            h[k] = v.class == Array ? v.join(';') : v
+          end
           h
         end
         row << to_store
