@@ -60,6 +60,18 @@ describe Executrix::Helper do
       "\"A second Title\",\"A second name\"\n"
       expect(described_class.records_to_csv(input)).to eq(expected_csv)
     end
+
+    it 'correctly converts empty arrays, nil values and blank strings to #N/A' do
+      input = [
+        {'Title' => nil, 'Picklist' => ['Several', 'Values']},
+        {'Title' => '', 'Picklist' => []},
+      ]
+
+      expected_csv = "\"Title\",\"Picklist\"\n" \
+        "\"#N/A\",\"Several;Values\"\n" \
+        "\"#N/A\",\"#N/A\"\n"
+      expect(described_class.records_to_csv(input)).to eq(expected_csv)
+    end
   end
 
   describe '.fetch_instance_from_server_url' do
