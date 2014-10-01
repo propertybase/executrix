@@ -72,9 +72,9 @@ describe Executrix::Batch do
   end
 
   describe '#results' do
-    let(:job_id) {"12345"}
-    let(:batch_id) {"67890"}
-    let(:connection) {stub("connection")}
+    let(:job_id) { "12345" }
+    let(:batch_id) { "67890" }
+    let(:connection) { double("connection") }
     subject {described_class.new connection, job_id, batch_id}
 
     context 'with a single page of results' do
@@ -125,4 +125,4 @@ describe Executrix::Batch do
       end
     end
   end
-end 
+end
