@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary     = %q{Ruby support for the Salesforce Bulk API}
   gem.description = %q{This gem provides a super simple interface for the Salesforce Bulk API. It provides support for insert, update, upsert, delete, and query.}
   gem.license     = 'MIT'
+  gem.post_install_message = 'Executrix is not actively maintained anymore. Please consider switching to its predecessor: Bulkforce (http://github.com/propertybase/bulkforce)'
 
   gem.rubyforge_project = 'executrix'
 
