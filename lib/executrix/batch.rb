@@ -25,11 +25,9 @@ module Executrix
         yield @final_status if block_given?
       end
 
-      raise @final_status[:state_message] if @final_status[:state] == 'Failed'
+      raise Executrix::BatchError.new(@final_status[:state_message]) if @final_status[:state] == 'Failed'
 
-      @final_status.merge({
-          results: results
-        })
+      self
     end
 
     def status
@@ -37,23 +35,26 @@ module Executrix
     end
 
     # results returned from Salesforce can be a single page id, or an array of ids.
-    # if it's an array of ids, we will fetch the results from each, and concatenate them.
-    def results
-      Array(query_result_id).map do |result_id|
-        @connection.query_batch_result_data(@job_id, @batch_id, result_id)
-      end.flatten
+    # if it's an array of ids, we will enumerate them.
+    def results &block
+      page_ids = Array(query_result_ids)
+      page_ids.each do |page_id|
+        results = @connection.query_batch_result_data(@job_id, @batch_id, page_id)
+        page = ResultsPage.new(results)
+        if block_given?
+          block.call page
+        else
+          yield page
+        end
+      end
     end
 
     def raw_request
       @connection.raw_request
     end
 
-    def raw_result
-      @connection.raw_result
-    end
-
     private
-    def query_result_id
+    def query_result_ids
       result_raw = @connection.query_batch_result_id(@job_id, @batch_id)
       result_raw[:result] if result_raw
     end

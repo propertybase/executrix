@@ -1,5 +1,6 @@
 *.gem
 .bundle
+dump.rdb
 Gemfile.lock
 pkg/*
 /vendor/bundle

@@ -246,4 +246,39 @@ describe Executrix::Helper do
       expect(described_class.parse_csv(csv_string)).to eq(expected_result)
     end
   end
+
+  describe '.split_csv_line' do
+    let(:line) {
+      "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"Jeremiah Jay\",\"\",\"0023643254AEF\",\"0027654454AEF\",\"\"\n"
+    }
+    let(:line2) {
+      "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"\"\"Jeremiah Jay\"\"\",\"\",\"0023643254AEF\",\"0027654454AEF\",\"\"\n"
+    }
+    let(:line3) {
+      "\"0023666454AEF\",\"2014-06-24T15:35:27.000Z\",\"Jeremiah Jay\",\"\",\"0023643254AEF\",\"0027654454AEF\",\"[{\"\"Json_key\"\":\"\"Json_value\"\"}]\"\n"
+    }
+    
+
+    let(:array) {
+      ["0023666454AEF", "2014-06-24T15:35:27.000Z", "Jeremiah Jay","", "0023643254AEF", "0027654454AEF",""]
+    }
+    let(:array_with_json) {
+      ["0023666454AEF", "2014-06-24T15:35:27.000Z", "Jeremiah Jay", "", "0023643254AEF", "0027654454AEF", "[{\"Json_key\":\"Json_value\"}]"]
+    }
+    let(:array_with_multiline) {
+      ["0023666454AEF", "2014-06-24T15:35:27.000Z", "Jeremiah \"Jay\"\n Thanks ","", "0023643254AEF", "0027654454AEF",""]
+    }
+
+    it "splits a comma-separated text to an array" do
+      expect(Executrix::Helper.split_csv_line(line)).to eq(array)
+    end
+
+    it "handles extra spaces responsibly" do
+      expect(Executrix::Helper.split_csv_line(line2)).to eq(array)
+    end
+
+    it "preserves double quotes in Json content" do
+      expect(Executrix::Helper.split_csv_line(line3)).to eq(array_with_json)
+    end
+  end
 end

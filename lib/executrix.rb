@@ -3,9 +3,14 @@ require 'executrix/helper'
 require 'executrix/batch'
 require 'executrix/http'
 require 'executrix/connection'
+require 'executrix/results_page'
 require 'zip'
 
 module Executrix
+
+  Error      = Class.new(StandardError)
+  BatchError = Class.new(Error)
+  
   class Api
     SALESFORCE_API_VERSION = '28.0'
 
